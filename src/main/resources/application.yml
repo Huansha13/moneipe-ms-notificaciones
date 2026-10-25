@@ -1,0 +1,18 @@
+# Config común a todos los perfiles
+spring:
+  application:
+    name: ms-notificaciones
+  profiles:
+    default: dev
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
