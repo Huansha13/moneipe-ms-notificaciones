@@ -1,6 +1,7 @@
 package win.huansha.moneipe.notificaciones.aplicacion.servicio;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import win.huansha.moneipe.notificaciones.infraestructura.adaptador.salida.persi
 import java.time.Instant;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificacionServicio implements NotificacionCasoUso {
@@ -51,7 +53,10 @@ public class NotificacionServicio implements NotificacionCasoUso {
                 .leida(saved.isLeida())
                 .fecha(saved.getFecha())
                 .build())
-            .doOnNext(notifSink::tryEmitNext);
+            .doOnNext(notif -> {
+                reactor.core.publisher.Sinks.EmitResult result = notifSink.tryEmitNext(notif);
+                log.info("Emit notification {} result={}", notif.getId(), result);
+            });
     }
 
     @Override
